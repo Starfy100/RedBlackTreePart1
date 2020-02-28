@@ -42,7 +42,7 @@ void pop(Node* &stackhead){ //removes item from stack in reverse order
     stackhead = stackhead->getNext();
   }
   else {
-    cout << "no data" << endl;
+    //cout << "no data" << endl;
   }
 }
 
@@ -77,11 +77,12 @@ int peek(Node* stackhead){ //looks at the top element of the stack
     else if (stackhead->getData() ==  43 || stackhead->getData() == 45){
       //element is + or -
       return 2;
-    } 
-    else if (stackhead->getData()  >= 48 && stackhead->getData() <= 57){
+    }
+    else if (stackhead->getData()  != 40 || stackhead->getData() != 41 || stackhead->getData() != 94 || stackhead->getData() != 42 || stackhead->getData() != 47 || stackhead->getData() != 43 || stackhead->getData() != 45){
       //element is number
       return 7;
     }
+    //*/
   }
   else {
     //stack has no data
@@ -126,13 +127,20 @@ void dequeue(Node* &queuehead){
   }
   else {
     //queue has no data
-    cout << "no data" << endl;
+    //cout << "no data" << endl;
   }
 }
 
 char* printpre(Node* current0){ //print in prefix notation
   if (current0 != NULL){
-    cout << (char)current0->getData();
+
+    if (current0->getData() == 40 || current0->getData() == 41 || current0->getData() == 94 || current0->getData() == 42 || current0->getData() == 47 || current0->getData() == 43 || current0->getData() == 45){
+    cout << (char)current0->getData() << " ";
+    }
+    else {
+      cout << current0->getData() << " ";
+    }
+
     printpre(current0->getLeft());
     printpre(current0->getRight());
   }
@@ -142,7 +150,16 @@ char* printpre(Node* current0){ //print in prefix notation
 char* printin(Node* current0){ //prints in infix notation
   if (current0 != NULL){
    printin(current0->getLeft());
-   cout << (char)current0->getData();
+   if (current0->getData() == 40 || current0->getData() == 41 || current0->getData() == 94 || current0->getData() == 42 || current0->getData() == 47 || current0->getData() == 43 || current0->getData() == 45){
+     
+     cout << (char)current0->getData() << " ";
+   }
+   else {
+     cout << current0->getData() << " ";
+   }
+   
+
+
    printin(current0->getRight());
   }
   return 0;
@@ -152,26 +169,53 @@ char* printpost(Node* current0){ //prints in postfix notation
   if (current0 != NULL){       
     printpost(current0->getLeft());
     printpost(current0->getRight());
-    cout << (char)current0->getData();
+
+     if (current0->getData() == 40 || current0->getData() == 41 || current0->getData() == 94 || current0->getData() == 42 || current0->getData() == 47 || current0->getData() == 43 || current0->getData() == 45){
+
+       cout << (char)current0->getData() << " ";
+    
+     }
+     else {
+       cout << current0->getData() << " ";
+     }
+
+     
   }
   return 0;
 }
 
-void parse(char* userexp, int i, Node* &inhead, Node* current0){
+void parse(char* userexp, int i, Node* &inhead, Node* current0, int &isnum){
   //converts input into individual items in a linked list
-
+  //int isnum = 0; //keeps track of if the current item in the user input is a number
+  int converted = 0;
   if (userexp[i] != 32 && userexp[i] != 0){
     //if the user input array[i] is not space and not null (a character)
     //add it to the list
-
+    if (userexp[i] >= 48 && userexp[i] <= 57){
+      converted = (int)userexp[i] - 48;
+      isnum = 1;
+      while (userexp[i+1] != 32 && userexp[i+1] != 0){
+	int temp = (int)userexp[i+1] - 48;
+	converted = (converted * 10) + temp;
+	i++;
+      }
+    }
+    
+    
     if (inhead == NULL) {
       //head is null, make new head node
       Node* newnode = new Node();
       inhead = newnode;
-      newnode->setData(userexp[i]);
+      if (isnum == 0){
+	newnode->setData(userexp[i]);
+      }
+      else {
+	newnode->setData(converted);
+      }
       i++;
       //restart the process with the next item in the user input array
-      parse(userexp, i, inhead, current0);
+      isnum = 0;
+      parse(userexp, i, inhead, current0, isnum);
     }
     
     else if (inhead != NULL){
@@ -180,11 +224,18 @@ void parse(char* userexp, int i, Node* &inhead, Node* current0){
 	current0 = current0->getNext();
       }
       Node* temp = new Node();
-      temp->setData(userexp[i]);
+      if (isnum == 0){
+	temp->setData(userexp[i]);
+      }
+      else {
+	temp->setData(converted);
+      }
+      
       current0->setNext(temp);
       i++;
       current0 = inhead;
-      parse(userexp, i, inhead, current0);
+      isnum = 0;
+      parse(userexp, i, inhead, current0, isnum);
     }
     
   }
@@ -192,7 +243,7 @@ void parse(char* userexp, int i, Node* &inhead, Node* current0){
   else if (userexp[i] == 32 && userexp[i] != 0) {
     //if the user input array[i] is a space and not null, move on
     i++;
-    parse(userexp, i, inhead, current0);
+    parse(userexp, i, inhead, current0, isnum);
   }
   else {
     //if the user input array[i] is null, stop
@@ -206,7 +257,7 @@ void convertpostfix(Node* inhead, Node* &stackhead, Node* &queuehead, Node* curr
   //if the top item of the stack ha greater or equal precedence
   //enqueue the stack
   
-    if (current0->getData() >= 48 && current0->getData() <= 57){
+  if (current0->getData() != 40 && current0->getData() != 41 && current0->getData() != 94 && current0->getData() != 42 && current0->getData() != 47 && current0->getData() != 43 && current0->getData() != 45){
       //item is a number, enqueue
       enqueue(current0, queuehead);
       //move forwards
@@ -296,7 +347,7 @@ void binarytree(Node* current0, Node* &stackhead, Node* binaryhead, Node* queueh
 
 
   if (current0 != NULL) {
-    if (current0->getData() >= 48 && current0->getData() <= 57){
+    if (/*current0->getData() >= 48 && current0->getData() <= 57*/current0->getData()  != 40 && current0->getData() != 41 && current0->getData() != 94 && current0->getData() != 42 && current0->getData() != 47 && current0->getData() != 43 && current0->getData() != 45){
       //if the current is a number, push it to the stack
       push(current0, stackhead);
       if (current0->getNext() != NULL){ //moves on to the next item
@@ -328,6 +379,7 @@ int main(){
   bool running = true;
 
   int i = 0; //for use in moving along array userexp, in void parse()
+  int isnum = 0; //keeps track of if the current item in the user input is a number
   
   Node* inhead = NULL; //head for the parsed infix notated list
   Node* queuehead = NULL; //head for the queue 
@@ -347,9 +399,10 @@ int main(){
       cout << "enter expression" << endl;
       cin.getline(userexp, 100);
       cout << "You typed: " << userexp << endl;
-      parse(userexp, i, inhead, current0);
+      parse(userexp, i, inhead, current0, isnum);
       cout << "converting to postfix notation" << endl;
       current0 = inhead;
+      cout << "before convertpostfix" << endl;
       convertpostfix(inhead, stackhead, queuehead, current0);
       cout << "converting to binary tree" << endl;
       current0 = queuehead;
@@ -361,7 +414,6 @@ int main(){
 
       cin >> userinput;
       cin.get();
-
       if (userinput == 'i'){ //triggers infix print
 	current0 = stackhead;
 	printin(current0);
@@ -375,16 +427,6 @@ int main(){
 	printpre(current0);
       }
     }
-    /*
-    else if (userinput == 'c'){
-      inhead = NULL;
-      binaryhead = NULL;
-      current0 = inhead;
-      while (queuehead != NULL){
-	dequeue(queuehead);
-      }
-    }
-    //*/
     else if (userinput == 'q'){ //quits the program
       running = false;
     }
