@@ -6,10 +6,10 @@ class Node {
 
  public:
   Node();
+  ~Node();
+  void setParent(Node* user); //sets the parent node
+  Node* getParent(); //returns the parent node
   
-  //void setNext(Node* user); //sets the next node
-  //Node* getNext(); //returns the next node
-
   void setLeft(Node* user); //sets the left node
   Node* getLeft(); //returns the left node
 
@@ -21,6 +21,7 @@ class Node {
   
  private:
   //Node* next;
+  Node* parent;
   Node* left;
   Node* right;
   int data;
