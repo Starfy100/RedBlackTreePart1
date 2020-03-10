@@ -392,7 +392,6 @@ void remove(Node* &treehead, Node* current, char* numsearch){ //removes a value 
 }
 
 int main(){
-
   bool running = true;
   char userinput;
   char* userexp = new char[100]; 
@@ -401,7 +400,6 @@ int main(){
     userexp[u] = 0;
     numsearch[u] = 0;
   }
-
   int layer = 0; //keeps track of tree layers
   int i = 0; //keeps track of position in userexp array
   Node* treehead = NULL; //root node for the binary tree
@@ -416,13 +414,12 @@ int main(){
 
   while (running == true){
     cout << "What do you want to do? ('e', 'p', 's', 'r', or 'q')" << endl;
+    cout << "(Enter, Print, Search, Remove, Quit)" << endl;
     cin >> userinput;
     cin.get();
-
     if (userinput == 'q'){
       running = false;
     }
-
     else if (userinput == 'e'){
       cout << "entered 'e'" << endl;
       cout << "read in from user or file? ('u' or 'f')" << endl;
