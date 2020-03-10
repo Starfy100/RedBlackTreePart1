@@ -20,10 +20,8 @@ class Node {
   int getData(); //returns data value
   
  private:
-  //Node* next;
   Node* parent;
   Node* left;
   Node* right;
   int data;
-
 };

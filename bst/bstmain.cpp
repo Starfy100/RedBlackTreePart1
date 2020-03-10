@@ -10,7 +10,7 @@ Written By: Starfy100
 Binary Search Tree
 Program will create a binary search tree
 Inputs can be read in from a user or file
-Nodes are placed left or right based on if their value is higher or lower than the root
+Nodes are placed right or left based on if their value is higher or lower than the root
 Program will be able to add, remove and check nodes
 The tree can also be printed
 
@@ -18,13 +18,10 @@ The add, remove and print functions can be called in any order
 
 Start Date: 3/2/2020
  */
-//TODO: fix remove
-//Note: remove does not work with a single node in the tree, remove also does not work in a few other circumstances
 
 
 bool search(Node* treehead, Node* current, char* numsearch){
   //checks to see if a value is present in the binary tree
-  //cout << "What number do you want to search?" << endl;
   int converted = 0;
    
     for (int i = 0; i < 100; i++){
@@ -39,17 +36,14 @@ bool search(Node* treehead, Node* current, char* numsearch){
     }
     
     while (current->getData() != converted && converted != -1){
-     
       if(converted < current->getData() && current->getLeft() != NULL){
-	
 	  current = current->getLeft();
       }
       
       else if (converted > current->getData() && current->getRight() != NULL){
-      
 	  current = current->getRight();
       }
-      
+     
       else if (current->getData() != converted){
 	converted = -1;
       }      
@@ -62,7 +56,9 @@ bool search(Node* treehead, Node* current, char* numsearch){
 
 void print(Node* current, int layer){
   //prints the tree, tree will appear sideways
-  if (current != NULL || current->getData() != 0){
+  
+  if (current != NULL){
+
     if (current->getRight() != NULL) { //if right is not null 
       print((current->getRight()), layer+1);
     }
@@ -117,24 +113,23 @@ void fparse(Node* current, Node* &treehead, char* userexp, int i){
 	i++;
       } 
       if (current == NULL){ //if the tree is empty, make new node
-	//cout << "tree is empty, setting tree head" << endl;
 	Node* temp = new Node();
 	temp->setData(converted);
 	temp->setLeft(NULL);
 	temp->setRight(NULL);
 	treehead = temp;
 	current = treehead;
-	//cout << "treehead data: " << treehead->getData() << endl;
+
       }
       
       
       else { //if the tree is not empty, place node
-   	while ((current->getData() < converted && current->getRight() != NULL) || (current->getData() > converted && current->getLeft() != NULL)) {
+   	while ((current->getData() <= converted && current->getRight() != NULL) || (current->getData() > converted && current->getLeft() != NULL)) {
 	  
 	//while the left or right nodes are not null
     
-	  if(current->getData() < converted){
-	    //if greater, go right	    
+	  if(current->getData() <= converted){
+	    //if converted is greater/equal, go right	    
 	    if (current->getRight() != NULL) { //if right is not null
 	      current = current->getRight();
 	    }
@@ -145,45 +140,32 @@ void fparse(Node* current, Node* &treehead, char* userexp, int i){
 	  else if (current->getData() > converted) {
 	    //else if smaller, go left
 	    if (current->getLeft() != NULL) {
-	      //cout << "move left" << endl;
+	     
 	      current = current->getLeft();
 	    }
-	    /*
-	    else {
-	      l = false;
-	    }
-	    //*/
 	  }
-	  
-	  }
+	}
 	
-	///*
 	//create and place node
 	if (current->getData() > converted){
-	  //cout << "current data is greater, node placed left " << endl;
+	
 	  Node* temp = new Node();
 	  temp->setData(converted);
-	  //temp->setLeft(NULL);
-	  //temp->setRight(NULL);
 	  current->setLeft(temp);
 	  temp->setParent(current);
 	  current = treehead;
-	  //cout << "current data" << current->getData() << endl;
-	  //cout << "current left data" << current->getLeft()->getData() << endl;
+
 	}
-	else if(current->getData() < converted) {
-	  //cout << "current data is lesser, node placed right" << endl;
+	else if(current->getData() <= converted) {
+	  //current data is lesser or equal, node placed rightl;
 	  Node* temp = new Node();
 	  temp->setData(converted);
-	  //temp->setLeft(NULL);
-	  //temp->setRight(NULL);
 	  current->setRight(temp);
 	  temp->setParent(current);
 	  current = treehead;
-	  //cout << "current data" << current->getData() << endl;
-	  //cout << "current right data" << current->getRight()->getData() << endl;
+
 	}
-	//*/
+
 
       }
       
@@ -212,98 +194,70 @@ void parse(Node* current, Node* &treehead, char* userexp, int i){ //turns user i
 	converted = (converted * 10) + temp;
 	i++;
       }
-      //cout << "converted: " << converted << endl;
       
       
       if (current == NULL){ //if the tree is empty, make new node
-	//cout << "tree is empty, setting tree head" << endl;
+	
 	Node* temp = new Node();
 	temp->setData(converted);
 	temp->setLeft(NULL);
 	temp->setRight(NULL);
 	treehead = temp;
 	current = treehead;
-	//cout << "treehead data: " << treehead->getData() << endl;
+	
       }
       
       
       else { //if the tree is not empty, place node
-	//cout << "else, tree is not empty" << endl;
-	//bool l = true;
-	while ((current->getData() < converted && current->getRight() != NULL) || (current->getData() > converted && current->getLeft() != NULL)) {
+	while ((current->getData() <= converted && current->getRight() != NULL) || (current->getData() > converted && current->getLeft() != NULL)) {
 	  
 	//while the left or right nodes are not null
-	//bool l = true;
-	//while (l == true) {
-       
-
-	  //cout << "while loop" << endl;
-	  //cout << "current data " << current->getData() << endl; 
-
-	  if(current->getData() < converted){
+	
+   
+	  if(current->getData() <= converted){
 	    //if greater, go right
-	    //cout << "current getRight Data: " << current->getRight()->getData() << endl;
-	    //cout << "current getLeft Data: " << current->getLeft()->getData() << endl;
-	    //cout << "current getData: " << current->getData() << endl;
+	    
 	    
 	    if (current->getRight() != NULL) { //if right is not null
-	      //cout << "move right" << endl;
+	
 	      current = current->getRight();
 	    }
-	    /*
-	    else {
-	      l = false;
-	    }
-	    //*/
+	    
 	  }
 	  
 	  
 	  else if (current->getData() > converted) {
 	    //else if smaller, go left
-	    //cout << "current getRight Data: " << current->getRight()->getData() << endl;
-	    //cout << "current getLeft Data: " << current->getLeft()->getData() << endl;
-	    //cout << "current getData: " << current->getData() << endl;
+	 
 	    
 	    if (current->getLeft() != NULL) {
-	      //cout << "move left" << endl;
+	   
 	      current = current->getLeft();
 	    }
-	    /*
-	    else {
-	      l = false;
-	    }
-	    //*/
+	  
 	  }
 	  
 	  }
 	
-	///*
+	
 	//create and place node
 	if (current->getData() > converted){
-	  //cout << "current data is greater, node placed left " << endl;
 	  Node* temp = new Node();
 	  temp->setData(converted);
-	  //temp->setLeft(NULL);
-	  //temp->setRight(NULL);
 	  current->setLeft(temp);
 	  temp->setParent(current);
 	  current = treehead;
-	  //cout << "current data" << current->getData() << endl;
-	  //cout << "current left data" << current->getLeft()->getData() << endl;
+	
 	}
-	else if(current->getData() < converted) {
-	  //cout << "current data is lesser, node placed right" << endl;
+	else if(current->getData() <= converted) {	
 	  Node* temp = new Node();
 	  temp->setData(converted);
-	  //temp->setLeft(NULL);
-	  //temp->setRight(NULL);
 	  current->setRight(temp);
 	  temp->setParent(current);
 	  current = treehead;
-	  //cout << "current data" << current->getData() << endl;
-	  //cout << "current right data" << current->getRight()->getData() << endl;
+	 
 	}
-	//*/
+	
 
       }
       
@@ -319,18 +273,22 @@ void parse(Node* current, Node* &treehead, char* userexp, int i){ //turns user i
  
 }
 
-void remove(Node* treehead, Node* current, char* numsearch){ //removes a value from the binary tree
+void remove(Node* &treehead, Node* current, char* numsearch){ //removes a value from the binary tree
   //removal works on replacing the node to be removed with the next largest or next smallest node
   cout << "What number do you want to remove?" << endl;
-
+  
   if(search(treehead, current, numsearch) == false){
     cout << numsearch << " does not exist" << endl;
   }
   else {
-    //once the desired node is reached, go left or right once and then the opposite direction for as far as you can go
+    //once the desired node is reached, and if the node had two children
+    //go left or right once and then the opposite direction as far as you can
     //once you cannot go farther, replace the first node with the second node
     //delete the second node
-    cout << "deleting" << endl;
+    
+    //if the node has one children, move the child into the parent spot
+    
+    
     int converted = 0;
     for (int i = 0; i < 100; i++){
       if(numsearch[i] != 32 && numsearch[i] != 0){
@@ -340,143 +298,99 @@ void remove(Node* treehead, Node* current, char* numsearch){ //removes a value f
 	  converted = (converted * 10) + temp;
 	  i++;
 	}
-	cout << "converted: " << converted << endl;
       }
     }
-
-    
-    
     while(current->getData() != converted){
-      //cout << "while loop" << endl;
-      cout << "converted " << converted << "  current data " << current->getData() << endl;
- 
-      if (converted > current->getData()){
-	//move left
+      if (converted >= current->getData()){
 	if(current->getRight() != NULL){
-	  cout << "m right" << endl;
 	  current = current->getRight();
 	}	
       }
-
-
       else{
-	if (current->getLeft() != NULL){
-	  cout << "m left" << endl;
+	if (current->getLeft() != NULL){ 
 	  current = current->getLeft();
 	}
       }
-      
     }
     
-    cout << "current data: " << current->getData() << endl;
     Node* curtem = new Node(); //curtem is the next largest item
     curtem = current;
-    //cout << "find next largest or smallest" << endl;
-    //find the next largest or smallest
-    //if (current->getLeft() != NULL){
-      if(curtem->getLeft() != NULL){
-	//cout << "mm left" << endl;
-	curtem = curtem->getLeft();
-	//cout << "curtem " << curtem->getData() << endl;
-      
-	while (curtem->getRight() != NULL){
-	  //cout << "mm right" << endl;
-	  curtem = curtem->getRight();
-	  //cout << "curtem " << curtem->getData() << endl;
+    if(curtem->getLeft() != NULL){
+      curtem = curtem->getLeft();
+      while (curtem->getRight() != NULL){
+	curtem = curtem->getRight();
+      }
+    }
+    //once curtem is found, proceed to node deletion
+    if(current->getData() == treehead->getData() && current->getLeft() == NULL && current->getRight() == NULL) {
+      //current is only node
+      treehead = NULL;
+    }
+    else if (current->getData() == treehead->getData() && (current->getLeft() == NULL || current->getRight() == NULL) ){
+      if (current->getLeft() != NULL){
+	current->setData(current->getLeft()->getData());
+	current->setLeft(NULL);
+      }
+      else if (current->getRight() !=NULL){
+	current->setData(current->getRight()->getData());
+	current->setRight(NULL);
+      }
+    }
+    else if (current->getLeft() != NULL && current->getRight() != NULL){
+      //current has 2 children, replace with next smallest item
+      int temp = curtem->getData(); 
+      if (curtem->getData() >= curtem->getParent()->getData()){
+	//if curtem is a right child
+	curtem->getParent()->setRight(curtem->getLeft());
+	if (curtem->getLeft() != NULL){
+	  curtem->getLeft()->setParent(curtem->getParent());
 	}
       }
-      //once curtem is found, proceed to node deletion
-      cout << "current data: " << current->getData() << endl;
-      cout << "curtem data: " << curtem->getData() << endl;
-      cout << "treehead data: " << treehead->getData() << endl;
-      cout << "replacing data" << endl;
-
-      if(current->getData() == treehead->getData() && current->getLeft() == NULL && current->getRight() == NULL) {
-	//current is only node
-	cout << "only node" << endl;
-	delete current;
-      }
-      else if (current->getData() == treehead->getData() && (current->getLeft() == NULL || current->getRight() == NULL) ){
-	if (current->getLeft() != NULL){
-	  current->setData(current->getLeft()->getData());
-	  current->setLeft(NULL);
-	}
-	else if (current->getRight() !=NULL){
-	  current->setData(current->getRight()->getData());
-	  current->setRight(NULL);
+      else if (curtem->getData() < curtem->getParent()->getData()){
+	//if curtem is a left child
+	curtem->getParent()->setLeft(curtem->getLeft());
+	if (curtem->getLeft() != NULL){
+	  curtem->getLeft()->setParent(curtem->getParent());
 	}
       }
-      
-      else if (current->getLeft() != NULL && current->getRight() != NULL){
-	//current has 2 children, replace with next smallest item
-	//current->setData(curtem->getData());
-	cout << "current has 2 children" << endl;
-	cout << "curtem data " << curtem->getData() << "  current data " << current->getData() << endl;
-	int temp = curtem->getData(); 
-	if (curtem->getData() > curtem->getParent()->getData()){
-	  //if curtem is a right child
-	  cout << "curtem is right child" << endl;
-	  curtem->getParent()->setRight(curtem->getLeft());
+      current->setData(temp);
+    }
+    
+    else if ( (current->getLeft() != NULL && current->getRight() == NULL) || (current->getLeft() == NULL && current->getRight() != NULL) ){
+      //current only has one child, move child into current spot
+      if (current->getRight() != NULL){
+	if (current->getData() >= current->getParent()->getData()){
+	  current->getParent()->setRight(current->getRight());
+	  current->getRight()->setParent(current->getParent());
 	}
-	else if (curtem->getData() < curtem->getParent()->getData()){
-	  //if curtem is a left child
-	  cout << "curtem is left child" << endl;
-	  curtem->getParent()->setLeft(curtem->getLeft());
-	}
-	current->setData(temp);
-      }
-      
-      else if ( (current->getLeft() != NULL && current->getRight() == NULL) || (current->getLeft() == NULL && current->getRight() != NULL) ){
-	//current only has one child, move child into parent spot
-	cout << "current has one child" << endl;
-	if (current->getRight() != NULL){
-	  if (current->getData() > current->getParent()->getData()){
-	    current->getParent()->setRight(current->getRight());
-	  }
-	  else if (current->getData() < current->getParent()->getData()) {
-	    current->getParent()->setLeft(current->getRight());
-	      }
-	}
-	else if (current->getLeft() != NULL){
-	  if (current->getData() > current->getParent()->getData()){
-	    current->getParent()->setRight(current->getLeft());
-	  }
-	  else if (current->getData() < current->getParent()->getData()) {
-	    current->getParent()->setLeft(current->getLeft());
-	  }
+	else if (current->getData() < current->getParent()->getData()) {
+	  current->getParent()->setLeft(current->getRight());
+	  current->getRight()->setParent(current->getParent());
 	}
       }
-      
-      else if (current->getLeft() == NULL && current->getRight() == NULL){
-	//if current has no child
-	cout << "current has no child" << endl;
-	if (current->getData() < current->getParent()->getData()){
-	  current->getParent()->setLeft(NULL);
+      else if (current->getLeft() != NULL){
+	if (current->getData() >= current->getParent()->getData()){
+	  current->getParent()->setRight(current->getLeft());
+	  current->getLeft()->setParent(current->getParent());
 	}
-	else {
-	  current->getParent()->setRight(NULL);
+	else if (current->getData() < current->getParent()->getData()) {
+	  current->getParent()->setLeft(current->getLeft());
+	  current->getLeft()->setParent(current->getParent());
 	}
       }
-	
-  
-      
-  }
-  
+    }
+    else if (current->getLeft() == NULL && current->getRight() == NULL){
+      //if current has no child	
+      if (current->getData() < current->getParent()->getData()){
+	curtem->getParent()->setLeft(NULL);
+      }
+      else {
+	curtem->getParent()->setRight(NULL);
+      }
+    } 
+  }  
 }
 
-  /*
-void printtreehead(Node* treehead){
-  if(treehead->getData() != 0){
-    cout << "treehead data: " << treehead->getData() << endl;
-  }
-  if(treehead->getLeft() != NULL){
-    cout << "treehead left data: " << treehead->getLeft()->getData() << endl;
-  }
-  if(treehead->getRight() != NULL){
-    cout << "treehead right data: " << treehead->getRight()->getData() << endl;
-  }
-}
-//*/
 int main(){
 
   bool running = true;
@@ -500,7 +414,6 @@ int main(){
    /__\/__\
   */
 
-
   while (running == true){
     cout << "What do you want to do? ('e', 'p', 's', 'r', or 'q')" << endl;
     cin >> userinput;
@@ -522,8 +435,7 @@ int main(){
 	current = treehead;
 	for (int u = 0; u < 100; u++){
 	  userexp[u] = 0;
-	}
-	
+	}	
 	cin.getline(userexp, 100);
 	parse(current, treehead, userexp, i);
       }
@@ -531,16 +443,13 @@ int main(){
 	cout << "entered f" << endl;
 	current = treehead;
 	fparse(current, treehead, userexp, i);
-      }
-            
+      }       
     }
-    
     else if (userinput == 'p'){
       cout << "entered 'p'" << endl;
       current = treehead;
       print(treehead, layer);
     }
-
     else if (userinput == 'r'){
       cout << "entered 'r'" << endl;
       cout << "what value do you want to remove?" << endl;
@@ -553,19 +462,13 @@ int main(){
       cout << "what value do you want to search?" << endl;
       current = treehead;
       cin.getline(numsearch , 100);
-      
       if (search(treehead, current, numsearch) == true){
 	cout << numsearch << " does exist" << endl;
-
       }
-
       else{
 	cout << numsearch << " does not exist" << endl;
       }
     }
-
-
-    
   }
   return 0;
 }
