@@ -8,17 +8,21 @@
 //#define GREEN   "\033[32m"      /* Green */
 //#define YELLOW  "\033[33m"      /* Yellow */
 #define BLUE    "\033[34m"      /* Blue */
-#define MAGENTA "\033[35m"      /* Magenta */
+
+//#define MAGENTA "\033[35m"      /* Magenta */
+
 #define CYAN    "\033[36m"      /* Cyan */
-#define WHITE   "\033[37m"      /* White */
+
+//#define WHITE   "\033[37m"      /* White */
 
 #define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
-#define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
-#define BOLDYELLOW  "\033[1m\033[33m"      /* Bold Yellow */
-#define BOLDBLUE    "\033[1m\033[34m"      /* Bold Blue */
-#define BOLDMAGENTA "\033[1m\033[35m"      /* Bold Magenta */
-#define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
-#define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
+
+//#define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
+//#define BOLDYELLOW  "\033[1m\033[33m"      /* Bold Yellow */
+//#define BOLDBLUE    "\033[1m\033[34m"      /* Bold Blue */
+//#define BOLDMAGENTA "\033[1m\033[35m"      /* Bold Magenta */
+//#define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
+//#define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
 
 #include "node.h"
 
@@ -26,14 +30,15 @@ using namespace std;
 /*
 Written By: Starfy100
 Red-Black Tree
-
-
-
-
+A self balancing tree where each node is either red or black (Program displays red or blue)
+The root of the tree is always black and all leaves are black
+Red node will always have two black child nodes, the opposite is not always true
+Every path from a given node to a null leaf will pass through the same number of black nodes
+The tree follows the same rules as a binary tree where left child nodes is smaller and right child nodes are larger
 
 Start Date: 3/10/2020
 End Date: 
-Total Time: 100 Min
+Total Time: 190 Min
  */
 
 void insert(Node* &current, Node* &treehead, int converted){ //inserts node into tree
@@ -78,7 +83,7 @@ void insert(Node* &current, Node* &treehead, int converted){ //inserts node into
       current->setLeft(temp);
       temp->setParent(current);
       temp->setColor(1);
-      current = treehead;
+      //current = treehead;
     }
     else if(current->getData() <= converted) {
       //current data is lesser or equal, node placed right;
@@ -87,7 +92,7 @@ void insert(Node* &current, Node* &treehead, int converted){ //inserts node into
       current->setRight(temp);
       temp->setParent(current);
       temp->setColor(0);
-      current = treehead;
+      //current = treehead;
     }
 
     
@@ -96,9 +101,29 @@ void insert(Node* &current, Node* &treehead, int converted){ //inserts node into
 }
 
 void repair(Node* current, Node* &treehead){ //fixes the tree if any rules are broken
-  //multiple cases for correction
-  //case 1:
+  //repair is recursive and only repairs the local nodes
+  //there multiple cases for correction
+  //case 1: the node being inserted is the root, it is painted black (blue)
 
+  //Note: case 1 is built into the insert function
+  /*
+  if (treehead == NULL){
+    //if tree is empty, insert node and color black
+  }
+  //*/
+
+  
+  //case 2: if the node being inserted will have a black parent, the node remains red, no extra steps
+  if (current->getParent()->getColor() == 1){
+    //if parent color if black, do nothing
+
+  }
+
+
+  
+//case 3: if the parent and uncle (sibling to parent) are both red, they are recolored black and the node is inserted
+
+//case 4: backflip, if the parent is red but the uncle is black perform a leftflip on parent, then rightflip and colorflip the parent and grandparent
 
   
 }
