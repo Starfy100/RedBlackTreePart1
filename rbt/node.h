@@ -21,6 +21,7 @@ class Node {
   
   void setColor(int user); //sets color value
   int getColor(); //returns color value
+  //0 = Red, 1 = Black, Default is Red
  private:
   Node* parent;
   Node* left;
