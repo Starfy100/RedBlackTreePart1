@@ -90,7 +90,6 @@ void insert(Node* &current, Node* &treehead, int converted){ //inserts node into
       current = treehead;
     }
 
-
     
   }
  
