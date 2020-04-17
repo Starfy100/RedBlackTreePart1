@@ -40,8 +40,39 @@ Start Date: 3/10/2020
 End Date: 
 Total Time: 190 Min
  */
+int siblingcolor(Node* current) { //gets the color value of the node's sibling
+  cout << "determining sibling color" << endl;
+  if (current->getParent() != NULL){
+    if (current->getData() < current->getParent()->getData() && current->getParent()->getRight() != NULL){ //parent a left node, return right node color
+      if (current->getParent()->getRight()->getColor() == 0) {
+	cout << "sibling color red" << endl;
+	return 0;
+      }
+      else if (current->getParent()->getRight()->getColor() == 1) {
+	cout << "sibling color blue" << endl;
+	return 1;
+      }
+    }	
+    else if (current->getData() > current->getParent()->getData() && current->getParent()->getLeft() != NULL){ //current is a right node, return left node color
+      if (current->getParent()->getLeft()->getColor() == 0) {
+	cout << "sibling color red" << endl;
+	return 0;
+      }
+      else if (current->getParent()->getLeft()->getColor() == 1) {
+	cout << "sibling color blue" << endl;
+	return 1;
+      }
+    }    
+  }
+  
+  //2 means no parent
+  cout << "no parent/no sibling" << endl;
+  return 2; 
+  
+    
+}
 
-void insert(Node* &current, Node* &treehead, int converted){ //inserts node into tree
+void insert (Node* &current, Node* &treehead, int converted){ //inserts node into tree
   cout << "inserting node" << endl;
   if (current == NULL){ //if the tree is empty 
     cout << "tree is empty" << endl;
@@ -50,7 +81,7 @@ void insert(Node* &current, Node* &treehead, int converted){ //inserts node into
     temp->setLeft(NULL);
     temp->setRight(NULL);
     temp->setParent(NULL);
-    temp->setColor(1);
+    temp->setColor(1); //node is colored black/blue
     treehead = temp;
     current = treehead;
   }
@@ -78,20 +109,25 @@ void insert(Node* &current, Node* &treehead, int converted){ //inserts node into
 
     if (current->getData() > converted){
       //current data is greater, node placed left;
+      cout << "node placed left" << endl;
       Node* temp = new Node();
       temp->setData(converted);
       current->setLeft(temp);
       temp->setParent(current);
-      temp->setColor(1);
+      temp->setColor(1); //node is set to ___
+
+      current = temp;
       //current = treehead;
     }
     else if(current->getData() <= converted) {
       //current data is lesser or equal, node placed right;
+      cout << "node placed right" << endl;
       Node* temp = new Node();
       temp->setData(converted);
       current->setRight(temp);
       temp->setParent(current);
-      temp->setColor(0);
+      temp->setColor(0); //node is set to ___
+      current = temp;
       //current = treehead;
     }
 
@@ -100,31 +136,83 @@ void insert(Node* &current, Node* &treehead, int converted){ //inserts node into
  
 }
 
-void repair(Node* current, Node* &treehead){ //fixes the tree if any rules are broken
+/*
+void case1(){
+
+}
+void case2(){
+
+}
+void case3(){
+
+}
+
+//*/
+
+
+
+void repair(Node* &current, Node* &treehead){ //fixes the tree if any rules are broken
   //repair is recursive and only repairs the local nodes
   //there multiple cases for correction
   //case 1: the node being inserted is the root, it is painted black (blue)
 
   //Note: case 1 is built into the insert function
-  /*
-  if (treehead == NULL){
-    //if tree is empty, insert node and color black
+  
+
+  cout << "entered repair" << endl;
+
+  if (current->getParent() != NULL ){
+    //case 2: if the node being inserted will have a black parent, the node remains red, no extra steps
+
+    if (current->getParent()->getColor() == 1){
+      //if parent color if black, do nothing
+      cout << "the parent is blue, insert a red node" << endl;
+      cout << current->getData() << endl;
+      current->setColor(0); //node set to red
+      current = treehead;
+    }
+    //case 3: if the parent and uncle (sibling to parent) are both red, they are recolored black and the node is inserted
+    
+    
+
+    //cout << "2nd if statement" << endl;
+    //cout << current->getData() << endl;
+    //cout << "sibling color value: " << siblingcolor(current->getParent()) << endl;
+
+    
+    else if (current->getParent()->getColor() == 0  && siblingcolor(current->getParent()) == 0 ){
+      cout << "2nd if statement" << endl;
+      cout << current->getData() << endl;
+      cout << "parent and uncle are both red, setting parent and uncle to blue" << endl << "no changes to inserted node" << endl;
+
+      if (current->getParent()->getData() > current->getParent()->getParent()->getData()){ //if the current's parent is larger (parent is a right child) 
+	current->getParent()->getParent()->getLeft()->setColor(1);
+	cout << current->getParent()->getParent()->getLeft()->getColor() << endl;
+      }
+      else if (current->getParent()->getData() < current->getParent()->getParent()->getData()) { //if the current's parent is lesser (parent is a left child)
+	current->getParent()->getParent()->getRight()->setColor(1);
+	cout << current->getParent()->getParent()->getRight()->getColor() << endl;
+      }
+      current->setColor(0);
+      current->getParent()->setColor(1);
+      current = treehead;
+    }
+    
+    ///*
+    else if (current->getParent()->getColor() == 0 && siblingcolor(current->getParent()) ) {
+
+    }
+    //*/
+    
+    //case 4: backflip, if the parent is red but the uncle is black perform a leftflip on parent, then rightflip and colorflip the parent and grandparent
   }
-  //*/
 
   
-  //case 2: if the node being inserted will have a black parent, the node remains red, no extra steps
-  if (current->getParent()->getColor() == 1){
-    //if parent color if black, do nothing
-
+  else {
+    cout << "current has no parent" << endl;
+    cout << current->getData() << endl;
   }
-
-
   
-//case 3: if the parent and uncle (sibling to parent) are both red, they are recolored black and the node is inserted
-
-//case 4: backflip, if the parent is red but the uncle is black perform a leftflip on parent, then rightflip and colorflip the parent and grandparent
-
   
 }
 
@@ -205,6 +293,11 @@ void fparse(Node* current, Node* &treehead, char* userexp, int i){ //reads input
 	i++;
       } 
 
+      cout << RED << "Converted: " << converted << RESET <<endl;
+      cout << BOLDRED << "Converted: " << converted << RESET <<endl;
+      cout << BLUE << "Converted: " << converted << RESET <<endl;
+      cout << CYAN << "Converted: " << converted << RESET <<endl;
+
       cout << "before file insert" << endl;
       insert(current, treehead, converted);
       cout << "after insert, before repair" << endl;
@@ -247,6 +340,13 @@ void print(Node* current, int layer){ //prints the tree
   
 }
 
+
+void lflip(Node* &current){ //left rotation of the passed-in node
+
+}
+void rflip(Node* &current){ //right rotation of the passed-in node
+
+}
 
 
 //NOT REQUIRED FOR PART 1
