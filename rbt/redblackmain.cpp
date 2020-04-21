@@ -152,39 +152,39 @@ void lflip(Node* current){ //left rotation of the passed-in node
   Node* temp =  new Node();
   temp = current->getRight();
   cout << "left flip" << endl;
-  
+  cout << "current data: " << current->getData() << endl;
   if (current->getRight()->getLeft() != NULL) {
     cout << "getright->getleft is not null" << endl;
-
-  current->setRight(current->getRight()->getLeft());
-  current->getParent()->setRight(temp);
-  current->setParent(temp);
-  temp->setLeft(current);
+    current->setRight(current->getRight()->getLeft());
+    current->getParent()->setRight(temp);
+    temp->setParent(current->getParent());
+    current->setParent(temp);
+    temp->setLeft(current);
   }
   else {
     cout << "getright->getleft is null" << endl;
     current->setRight(NULL);
-    //Node* temp2 = new Node();
-    //temp2 = current->getParent()->getParent();
     current->getParent()->setRight(temp);
+    temp->setParent(current->getParent());
     current->setParent(temp);
     temp->setLeft(current);
   
   }
   
-  current->setParent(temp);
+  //current->setParent(temp);
 }
 void rflip(Node* current){ //right rotation of the passed-in node
   Node* temp =  new Node();
   temp = current->getLeft();
   cout << "right flip" << endl;
-
-  if (current->getLeft() != NULL){
+  cout << "current data: " << current->getData() << endl;
+  //if (current->getLeft() != NULL){
     if (current->getLeft()->getRight() != NULL){
       
       cout << "getleft->getright is not null" << endl;
       current->setLeft(current->getLeft()->getRight());
       current->getParent()->setLeft(temp);
+      temp->setParent(current->getParent());
       current->setParent(temp);
       temp->setRight(current);
       
@@ -193,17 +193,19 @@ void rflip(Node* current){ //right rotation of the passed-in node
       cout << "getleft->getright is null" << endl;
       current->setLeft(NULL);
       current->getParent()->setLeft(temp);
+      temp->setParent(current->getParent());
       current->setParent(temp);
       temp->setRight(current);
     }
-  }
-    else if (current->getLeft() == NULL) {
-      cout << "current left is null" << endl;
+
+    //}
+//else if (current->getLeft() == NULL) {
+//    cout << "current left is null" << endl;
       
-    }
+//  }
 
 
-  current->setParent(temp);
+    //current->setParent(temp);
 }
 
 void case4(Node* current){
@@ -213,11 +215,21 @@ void case4(Node* current){
     rflip(current->getParent()->getParent());
   }
   else {
+    cout << "current parent parent data " << current->getParent()->getParent()->getData() << endl;
     lflip(current->getParent()->getParent());
   }
-  cout << "changing parent and grandparent color" << endl;
+  cout << "changing parent and sibling color" << endl;
   current->getParent()->setColor(1);
-  current->getParent()->getParent()->setColor(0);
+  
+  if (current == current->getParent()->getRight()){
+    cout << "set parent left red" << endl;
+    current->getParent()->getLeft()->setColor(0);
+  }
+  else {
+    cout << "set parent right red" << endl;
+    current->getParent()->getRight()->setColor(0);
+  }
+  //current->getParent()->getParent()->setColor(0);
 
 }
 
@@ -287,6 +299,7 @@ void repair(Node* &current, Node* &treehead){ //fixes the tree if any rules are 
       if (current == current->getParent()->getRight() && current->getParent() == current->getParent()->getParent()->getLeft()) {
 
 	cout << "rotating left" << endl;
+	cout << "current data: " << current->getData() << endl;
 	lflip(current->getParent());
 	cout << "after left flip" << endl;
 	cout << "current data: " << current->getData() << endl;
@@ -297,15 +310,17 @@ void repair(Node* &current, Node* &treehead){ //fixes the tree if any rules are 
       
       else if (current == current->getParent()->getLeft() && current->getParent() == current->getParent()->getParent()->getRight()){
 	cout << "rotating right" << endl;
+	cout << "current data: " << current->getData() << endl;
 	rflip(current->getParent());
 	cout << "after right flip" << endl;
 	cout << "current data: " << current->getData() << endl;
 	current = current->getRight();
 	cout << "current data: " << current->getData() << endl;
       }
-      
+      cout << "before case 4 part 2" << endl;
       cout << "current data: " << current->getData() << endl;
       cout << "current parent data: " << current->getParent()->getData() << endl;
+      cout << "current parent parent data: " << current->getParent()->getParent()->getData() << endl;
       case4(current);
       current = treehead;
     }
